@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="/styles.css" />
+<%- include('../partials/header') %>
+<title><%= pageProducts %></title>
+<h1>Danh sách sản phẩm</h1>
+
+<div class="flex flex-wrap">
+  <% list.forEach(item => {%>
+  <div class="w-1/3">
+   <a href="/products/detail/<%= item._id %>">
+    <img src="<%= item.thumbnail %>">
+   </a>
+    <p><%= item.title %></p>
+    <p><%= item.price %></p>
+  </div>
+  <% }) %>
+</ul>
+<%- include('../partials/footer') %>

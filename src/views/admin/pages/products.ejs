@@ -1,0 +1,97 @@
+<link rel="stylesheet" href="/styles.css" />
+<title>Trang danh sách sản phẩm</title>
+<%- include('../partials/header') %>
+
+<div class="flex">
+  <div class="w-[20%] bg-[#303234]">
+    <%- include('../partials/sider') %>
+  </div>
+  <div class="flex-1">
+    
+    <h1 class="text-4xl font-bold">Danh sách sản phẩm</h1>
+    <p>Filter</p>
+    <div class="flex gap-10">
+        <div>
+            <button class="<%= statusCur == "" ?  "border px-3 mr-5 text-white border-green-300 bg-green-800" : "border px-3 mr-5 text-green-400 border-green-300"  %>" status="">Tất cả</button>
+            <button class="<%= statusCur == "active" ?  "border px-3 mr-5 text-white border-green-300 bg-green-800" : "border px-3 mr-5 text-green-400 border-green-300"  %>"  status="active">Hoạt Động</button>
+            <button class="<%= statusCur == "inactive" ?  "border px-3 mr-5 text-white border-green-300 bg-green-800" : "border px-3 mr-5 text-green-400 border-green-300"  %>"  status="inactive">Dừng Hoạt Động</button>
+        </div>
+        <form id="form">
+            <input type="text" value="<%= keyword %>" class="outline-1 outline-green-400 " placeholder="Nhập từ khoá">
+            <button class="outline-1 ml-5 px-3 outline-green-400 text-green-600" type="submit">Tìm</button>
+        </form>
+        <a class="border-green-500 border-2 px-3 hover:bg-green-600 hover:text-white cursor-pointer" href="/admin/products/create">
+          Thêm mới sản phẩm
+        </a>
+      </div>
+      <form class="mt-10" action="/admin/products/change-status-multi?_method=patch" method="post" id="formChangeStatus">
+        <select name="status">
+          <option value="active">Hoạt Động</option>
+          <option value="inactive">Không hoạt động</option>
+        </select>
+        <input name="ids" class="ouline-1 hidden" id="idsChangeStatus">
+        <button class="bg-green-700 text-white px-3">Ap dung</button>
+      </form>
+    <table class="w-full mt-25">
+      <thead class="border-b border-t">
+        <th>
+          <input type="checkbox" value="" AllChange>
+        </th>
+        <th class="w-1/6 p-5">STT</th>
+        <th class="w-1/6 p-5">Hình ảnh</th>
+        <th class="w-1/6 p-5">Tiêu đề</th>
+        <th class="w-1/6 p-5">Giá</th>
+        <th class="w-1/6 p-5">Trạng thái</th>
+        <th class="w-1/6 p-5">Hành Động</th>
+      </thead>
+      <tbody class="space-x-5">
+        <% productList.forEach((item, index) =>{ %>
+            <tr class="border-b">
+                <td>
+                  <input type="checkbox" value="<%= item._id %>" idNeedChange>
+                </td>
+                <td class="text-center"><%= index + 1 %></td>
+                <td class="flex justify-center">
+                    <img src= <%= item.thumbnail %> class="w-40" >
+                </td>
+                <td class="text-center"><%= item.title %></td>
+                <td class="text-center"><%= item.price %></td>
+                <td class="text-center">
+                    <% if(item.status == 'active'){ %>
+                        <button class="bg-green-400 text-white" type="button" changeStatus="active" id="<%= item._id %>" >Hoạt Động</button>    
+                    <% } else{%>
+                        <button changeStatus="inactive" id="<%= item._id %>">Dừng hoạt động</button>    
+                    <% } %>
+                </td>
+                <td class="text-center">
+                    <button class="bg-amber-300 px-3 cursor-pointer" >Edit</button>
+                    <button class="bg-red-500 px-3 cursor-pointer" id="<%= item._id %>" btnDelete >Delete</button>
+                    <a class="bg-gray-400 px-3 cursor-pointer" href="/admin/products/detail/<%= item._id %>" >Detail</a>
+                </td>
+            </tr>
+        <% }) %>
+      </tbody>
+    </table>
+      <% [...Array(pages.maxPage)].forEach((item, index)=>{ %>
+          <button class="bg-amber-300 px-3 mr-3"  curPage="<%= index + 1 %>"><%= index + 1 %></button>  
+        <% }) %>
+  </div>
+</div>
+<form 
+  method="POST"
+  action=""
+  dataPath = '/admin/products/change-status/'
+  id="formPeseudo"
+>
+</form>
+
+<form 
+  method="POST"
+  action=""
+  dataPath = '/admin/products/delete/'
+  id="form-delete-item"
+>
+</form>
+
+<%- include('../partials/footer') %>
+
